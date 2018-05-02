@@ -19,6 +19,16 @@
 
         </android.support.v7.widget.Toolbar>
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:elevation="8dp"
+            android:src="@mipmap/ic_done" />
+
+
     </FrameLayout>
 
     <android.support.design.widget.NavigationView
@@ -28,7 +38,7 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/nav_menu">
-        
+
     </android.support.design.widget.NavigationView>
 
 
