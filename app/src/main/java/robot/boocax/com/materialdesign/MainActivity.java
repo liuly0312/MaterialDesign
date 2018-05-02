@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
+    private int count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +66,22 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "this is fab", Toast.LENGTH_LONG).show();
+//                Toast.makeText(MainActivity.this, "this is fab", Toast.LENGTH_LONG).show();
+                count = 1;
+                Log.i("SnackBar", "count=" + count);
+                Snackbar.make(v, "Data delete", Snackbar.LENGTH_LONG)
+                        .setAction("Undo", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Toast.makeText(MainActivity.this, "Data restored", Toast.LENGTH_LONG).show();
+                                count = 0;
+                                Log.i("SnackBar", "count=" + count);
+                            }
+                        }).show();
             }
         });
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
