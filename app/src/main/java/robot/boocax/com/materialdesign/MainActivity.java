@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private int count;
+    private SwipeRefreshLayout swipeRefresh;
 
     private Fruits[] fruits = {new Fruits("Apple", R.mipmap.apple), new Fruits("Banana", R.mipmap.banana),
             new Fruits("Orange", R.mipmap.orange), new Fruits("Watermelon", R.mipmap.watermelon),
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         mDrawerLayout = findViewById(R.id.drawer_layout);
         ActionBar actionBar = getSupportActionBar();
         if (null != actionBar) {
@@ -96,15 +99,43 @@ public class MainActivity extends AppCompatActivity {
                         }).show();
             }
         });
-
         initFruits();
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new FruitAdapter(fruitList);
         recyclerView.setAdapter(adapter);
+
+        swipeRefresh = findViewById(R.id.swipe_refresh);
+        swipeRefresh.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshFruits();
+            }
+        });
     }
 
+    private void refreshFruits() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        initFruits();
+                        adapter.notifyDataSetChanged();
+                        swipeRefresh.setRefreshing(false);
+                    }
+                });
+            }
+        }).start();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
